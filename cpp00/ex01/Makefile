@@ -1,16 +1,16 @@
 CC = c++
 CFLAG = -Wall -Wextra -Werror -std=c++98
-NAME = ex00
-SRCS = megaphone.cpp \
+NAME = ex01
+SRCS = main.cpp \
 
-OBJS = $(SRCS:%.c=%.o)
+OBJS = $(SRCS:%.cpp=%.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
 	$(CC) $(CFLAG) $(OBJS) -o $@
 
-%.o: %.c
+%.o: %.cpp
 	$(CC) $(CFLAG) -c $< -o $@
 
 clean:
