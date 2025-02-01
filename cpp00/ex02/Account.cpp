@@ -1,0 +1,91 @@
+#include <iostream>
+#include <ctime>
+#include <iomanip>
+#include "Account.hpp"
+
+int Account::_nbAccounts = 0;
+int Account::_totalAmount = 0;
+int Account::_totalNbDeposits = 0;
+int Account::_totalNbWithdrawals = 0;
+
+int Account::getNbAccounts( void )
+{
+	return _nbAccounts;
+}
+
+int	Account::getTotalAmount( void )
+{
+	return _totalAmount;
+}
+
+int	Account::getNbDeposits( void )
+{
+	return _totalNbDeposits;
+}
+
+int	Account::getNbWithdrawals( void )
+{
+	return _totalNbWithdrawals;
+}
+
+void	Account::displayAccountsInfos( void )
+{
+	
+}
+
+Account::Account( int initial_deposit )
+{
+	_amount = initial_deposit;
+	_accountIndex = _nbAccounts++;
+	_displayTimestamp();
+	std::cout << "index:" << _accountIndex << ";" << "amount:" << _amount << ";" << "created" << std::endl;
+}
+
+Account::~Account( void )
+{
+	_nbAccounts--;
+}
+
+void	Account::makeDeposit( int deposit )
+{
+	_amount += deposit;
+	_nbDeposits++;
+}
+
+bool	Account::makeWithdrawal( int withdrawal )
+{
+	if (_amount - withdrawal >= 0)
+	{
+		_amount -= withdrawal;
+		_nbWithdrawals++;
+		return true;
+	}
+	return false;
+}
+
+int		Account::checkAmount( void ) const
+{
+	return 0;
+}
+
+void	Account::displayStatus( void ) const
+{
+
+}
+
+void	Account::_displayTimestamp( void )
+{
+	time_t timestamp = time(&timestamp);
+	struct tm datetime = *localtime(&timestamp);
+	std::cout << "[" << datetime.tm_year + 1900;
+	std::cout << std::setw(2) << std::setfill('0') << datetime.tm_mon + 1;
+	std::cout << std::setw(2) << std::setfill('0') << datetime.tm_mday << "_";
+	std::cout << std::setw(2) << std::setfill('0') << datetime.tm_hour;
+	std::cout << std::setw(2) << std::setfill('0') << datetime.tm_min;
+	std::cout << std::setw(2) << std::setfill('0') << datetime.tm_sec << "] ";
+}
+
+Account::Account( void )
+{
+
+}
