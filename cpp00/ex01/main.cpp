@@ -88,6 +88,8 @@ int main()
 
 		std::cout << "Type in your command (ADD, SEARCH, EXIT):" << std::endl;
 		std::cin >> input;
+		if (std::cin.eof())
+			break ;
 		if (!input.compare("ADD"))
 			book.add_contact();
 		if (!input.compare("SEARCH"))
