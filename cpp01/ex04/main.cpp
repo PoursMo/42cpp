@@ -11,7 +11,7 @@ int main(int argc, char **argv)
 	std::ifstream file(argv[1]);
 	if (!file)
 	{
-		std::cerr << argv[1] << ": no such file" << std::endl;
+		std::cout << argv[1] << ": no such file" << std::endl;
 		return 1;
 	}
 	std::string replace_file_name = std::string(argv[1]) + ".replace";
@@ -22,7 +22,7 @@ int main(int argc, char **argv)
 	while (getline(file, line))
 	{
 		std::size_t pos = 0;
-		while((pos = line.find(target_str)) != std::string::npos)
+		while ((pos = line.find(target_str)) != std::string::npos)
 		{
 			line.erase(pos, target_str.size());
 			line.insert(pos, replace_str);
