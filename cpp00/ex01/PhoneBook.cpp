@@ -7,6 +7,22 @@ std::string truncated_string(std::string str)
 	return str;
 }
 
+bool is_valid_number(std::string str)
+{
+	if(str.empty())
+		return false;
+	for (size_t i = 0; i < str.size(); i++)
+	{
+		if(!isdigit(str[i]) && str[i] != ' ')
+			return false;
+	}
+	return true;
+}
+
+PhoneBook::PhoneBook() : contact_index(0)
+{
+}
+
 void PhoneBook::display_contacts()
 {
 	for (int i = 0; i < 8; i++)
@@ -14,55 +30,32 @@ void PhoneBook::display_contacts()
 		if (!contacts[i].empty())
 		{
 			std::cout << '|' << std::setw(10) << i;
-			std::cout << '|' << std::setw(10) << truncated_string(contacts[i].first_name);
-			std::cout << '|' << std::setw(10) << truncated_string(contacts[i].last_name);
-			std::cout << '|' << std::setw(10) << truncated_string(contacts[i].nickname) << '|' << std::endl;
+			std::cout << '|' << std::setw(10) << truncated_string(contacts[i].get_first_name());
+			std::cout << '|' << std::setw(10) << truncated_string(contacts[i].get_last_name());
+			std::cout << '|' << std::setw(10) << truncated_string(contacts[i].get_nickname()) << '|' << std::endl;
 		}
 	}
 }
 
-PhoneBook::PhoneBook()
+std::string get_contact_element(std::string message)
 {
-	contact_index = 0;
-}
-
-bool has_digit(std::string str)
-{
-	for (size_t i = 0; i < str.size(); i++)
+	std::string element;
+	while(element.empty() && !std::cin.eof())
 	{
-		if(!isdigit(str[i]))
-			return false;
+		std::cout << message << std::endl;
+		std::getline(std::cin, element);
 	}
-	return true;
+	return element;
 }
 
 void PhoneBook::add_contact()
 {
-	while(contacts[contact_index].first_name.empty() && !std::cin.eof())
-	{
-		std::cout << "First name:" << std::endl;
-		std::getline(std::cin, contacts[contact_index].first_name);
-	}
-	while(contacts[contact_index].last_name.empty() && !std::cin.eof())
-	{
-		std::cout << "Last name:" << std::endl;
-		std::getline(std::cin, contacts[contact_index].last_name);
-	}
-	while(contacts[contact_index].nickname.empty() && !std::cin.eof())
-	{
-		std::cout << "Nickname:" << std::endl;
-		std::getline(std::cin, contacts[contact_index].nickname);
-	}
-	while(contacts[contact_index].darkest_secret.empty() && !std::cin.eof())
-	{
-		std::cout << "Darkest secret:" << std::endl;
-		std::getline(std::cin, contacts[contact_index].darkest_secret);
-	}
-	while ((contacts[contact_index].phone_number.empty() && !std::cin.eof()) || !has_digit(contacts[contact_index].phone_number))
-	{
-		std::cout << "Phone number:" << std::endl;
-		std::getline(std::cin, contacts[contact_index].phone_number);
-	}
+	contacts[contact_index].set_first_name(get_contact_element("First name:"));
+	contacts[contact_index].set_last_name(get_contact_element("Last name:"));
+	contacts[contact_index].set_nickname(get_contact_element("Nickname:"));
+	contacts[contact_index].set_darkest_secret(get_contact_element("Darkest secret:"));
+	while (!is_valid_number(contacts[contact_index].get_phone_number()))
+		contacts[contact_index].set_phone_number(get_contact_element("Phone number:"));
 	if (contact_index + 1 >= 8)
 		contact_index = 0;
 	else
