@@ -37,7 +37,7 @@ void PhoneBook::display_contacts()
 	}
 }
 
-std::string get_contact_element(std::string message)
+std::string get_element(std::string message)
 {
 	std::string element;
 	while(element.empty() && !std::cin.eof())
@@ -50,12 +50,12 @@ std::string get_contact_element(std::string message)
 
 void PhoneBook::add_contact()
 {
-	contacts[contact_index].set_first_name(get_contact_element("First name:"));
-	contacts[contact_index].set_last_name(get_contact_element("Last name:"));
-	contacts[contact_index].set_nickname(get_contact_element("Nickname:"));
-	contacts[contact_index].set_darkest_secret(get_contact_element("Darkest secret:"));
+	contacts[contact_index].set_first_name(get_element("First name:"));
+	contacts[contact_index].set_last_name(get_element("Last name:"));
+	contacts[contact_index].set_nickname(get_element("Nickname:"));
+	contacts[contact_index].set_darkest_secret(get_element("Darkest secret:"));
 	while (!is_valid_number(contacts[contact_index].get_phone_number()))
-		contacts[contact_index].set_phone_number(get_contact_element("Phone number:"));
+		contacts[contact_index].set_phone_number(get_element("Phone number:"));
 	if (contact_index + 1 >= 8)
 		contact_index = 0;
 	else
@@ -65,9 +65,8 @@ void PhoneBook::add_contact()
 void PhoneBook::search_contact()
 {
 	display_contacts();
-	int i;
-	std::cin >> i;
-	std::cin.ignore(__INT32_MAX__, '\n');
+	std::string index = get_element("Index:");
+	//conversion to int
 	if (i < 0 || i > 7 || contacts[i].empty())
 	{
 		std::cout << "Not a valid index" << std::endl;
