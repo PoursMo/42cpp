@@ -11,14 +11,14 @@ int main(int argc, char **argv)
 	std::ifstream file(argv[1]);
 	if (!file)
 	{
-		std::cout << argv[1] << ": no such file" << std::endl;
+		std::cout << argv[1] << ": Error" << std::endl;
 		return 1;
 	}
 	std::string replace_file_name = std::string(argv[1]) + ".replace";
 	std::ofstream replace_file(replace_file_name.c_str());
-	std::string line;
 	std::string target_str = argv[2];
 	std::string replace_str = argv[3];
+	std::string line;
 	while (getline(file, line))
 	{
 		std::size_t pos = 0;
