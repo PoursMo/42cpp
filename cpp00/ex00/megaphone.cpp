@@ -7,10 +7,11 @@ int main(int argc, char **argv)
 		argv++;
 		while (*argv)
 		{
-			while (**argv)
+			std::string strarg(*argv);
+			for(int i = 0; i < strarg.size(); i++)
 			{
-				std::cout << (char)toupper(**argv);
-				(*argv)++;
+				std::cout << (char)toupper(strarg[i]);
+				i++;
 			}
 			argv++;
 		}
