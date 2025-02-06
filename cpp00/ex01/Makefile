@@ -2,6 +2,8 @@ CC = c++
 CFLAG = -Wall -Wextra -Werror -std=c++98
 NAME = ex01
 SRCS = main.cpp \
+Contact.cpp \
+PhoneBook.cpp \
 
 OBJS = $(SRCS:%.cpp=%.o)
 
