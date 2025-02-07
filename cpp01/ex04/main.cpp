@@ -19,7 +19,7 @@ int main(int argc, char **argv)
 	std::string target_str = argv[2];
 	std::string replace_str = argv[3];
 	std::string line;
-	while (getline(file, line))
+	while (std::getline(file, line))
 	{
 		std::size_t pos = 0;
 		while ((pos = line.find(target_str)) != std::string::npos)

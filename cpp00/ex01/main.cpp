@@ -9,7 +9,6 @@ int main()
 	while (1)
 	{
 		std::string input;
-
 		std::cout << "Type in your command (ADD, SEARCH, EXIT):" << std::endl;
 		std::getline(std::cin, input);
 		if (std::cin.eof())

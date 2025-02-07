@@ -13,7 +13,7 @@ static bool is_valid_number(std::string str)
 		return false;
 	for (size_t i = 0; i < str.size(); i++)
 	{
-		if(!isdigit(str[i]) && str[i] != ' ')
+		if(!std::isdigit(str[i]) && str[i] != ' ')
 			return false;
 	}
 	return true;
