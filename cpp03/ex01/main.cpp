@@ -1,18 +1,21 @@
-#include "ClapTrap.hpp"
+#include "ScavTrap.hpp"
 
 int main()
 {
-	ClapTrap ct("George");
+	ScavTrap ct("George");
 	ct.beRepaired(20);
 	ct.attack("John");
-	ct.takeDamage(100);
+	ct.guardGate();
+	ct.takeDamage(150);
 	ct.attack("John");
 	ct.beRepaired(20);
+	ct.guardGate();
 	
-	ct = ClapTrap("William");
-	for (size_t i = 0; i < 11; i++)
+	ct = ScavTrap("William");
+	for (size_t i = 0; i < 51; i++)
 	{
 		ct.attack("John");
 	}
 	ct.beRepaired(20);
+	ct.guardGate();
 }

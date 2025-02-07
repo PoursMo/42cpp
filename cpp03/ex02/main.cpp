@@ -1,15 +1,16 @@
-#include "ClapTrap.hpp"
+#include "FragTrap.hpp"
+#include "ScavTrap.hpp"
 
 int main()
 {
-	ClapTrap ct("George");
+	FragTrap ct("George");
 	ct.beRepaired(20);
 	ct.attack("John");
 	ct.takeDamage(150);
 	ct.attack("John");
 	ct.beRepaired(20);
 	
-	ct = ClapTrap("William");
+	ct = FragTrap("William");
 	for (size_t i = 0; i < 11; i++)
 	{
 		ct.attack("John");
