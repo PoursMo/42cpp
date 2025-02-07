@@ -3,17 +3,37 @@
 
 int main()
 {
-	FragTrap ct("George");
-	ct.beRepaired(20);
-	ct.attack("John");
-	ct.takeDamage(150);
-	ct.attack("John");
-	ct.beRepaired(20);
+	FragTrap ft("George");
+	ft.beRepaired(20);
+	ft.attack("John");
+	ft.highFivesGuys();
+	ft.takeDamage(150);
+	ft.attack("John");
+	ft.beRepaired(20);
+	ft.highFivesGuys();
 	
-	ct = FragTrap("William");
-	for (size_t i = 0; i < 11; i++)
+	ft = FragTrap("William");
+	for (size_t i = 0; i < 101; i++)
 	{
-		ct.attack("John");
+		ft.attack("John");
 	}
-	ct.beRepaired(20);
+	ft.beRepaired(20);
+	ft.highFivesGuys();
+
+	ScavTrap st("George");
+	st.beRepaired(20);
+	st.attack("John");
+	st.guardGate();
+	st.takeDamage(150);
+	st.attack("John");
+	st.beRepaired(20);
+	st.guardGate();
+	
+	st = ScavTrap("William");
+	for (size_t i = 0; i < 51; i++)
+	{
+		st.attack("John");
+	}
+	st.beRepaired(20);
+	st.guardGate();
 }
