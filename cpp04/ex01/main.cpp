@@ -1,29 +1,37 @@
 #include "Cat.hpp"
-#include "WrongCat.hpp"
 #include "Dog.hpp"
 
 int main()
 {
-	const Animal *meta = new Animal();
-	const Animal *j = new Dog();
-	const Animal *i = new Cat();
-
-	std::cout << j->getType() << " " << std::endl;
-	std::cout << i->getType() << " " << std::endl;
-	i->makeSound(); // will output the cat sound!
-	j->makeSound();
-	meta->makeSound();
-	Dog().makeSound();
-	Cat().makeSound();
-	delete meta;
-	delete j;
-	delete i;
-
-	const WrongAnimal *wrongmeta = new WrongAnimal();
-	const WrongAnimal *k = new WrongCat();
-	std::cout << k->getType() << " " << std::endl;
-	k->makeSound();
-	wrongmeta->makeSound();
-	delete wrongmeta;
-	delete k;
+	int size = 20;
+	std::cout << "\e[1;35mcreating array\e[0m" << std::endl;
+	Animal *animals[size];
+	int i = 0;
+	for (; i < size / 2; i++)
+	{
+		animals[i] = new Dog();
+	}
+	for (; i < size; i++)
+	{
+		animals[i] = new Cat();
+	}
+	std::cout << "\e[1;35mdeleting both arrays\e[0m" << std::endl;
+	for (i = 0; i < size; i++)
+	{
+		delete animals[i];
+	}
+	std::cout << "\e[1;35m*****************\e[0m" << std::endl;
+	Cat *cat = new Cat();
+	cat->get_brain()->get_ideas()[51] = "bonjour";
+	Cat *cat_copy = new Cat(*cat);
+	cat_copy->get_brain()->get_ideas()[52] = "hello";
+	Cat *cat_copy2 = new Cat();
+	*cat_copy2 = *cat_copy;
+	cat_copy2->get_brain()->get_ideas()[53] = "coucou";
+	cat->get_brain()->print_ideas();
+	cat_copy->get_brain()->print_ideas();
+	cat_copy2->get_brain()->print_ideas();
+	delete cat;
+	delete cat_copy;
+	delete cat_copy2;
 }

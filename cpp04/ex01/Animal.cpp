@@ -18,7 +18,6 @@ Animal& Animal::operator=(const Animal &rhs)
 	{
 		type = rhs.type;
 	}
-
 	return *this;
 }
 

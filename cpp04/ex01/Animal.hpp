@@ -1,18 +1,20 @@
-#ifndef Brain_HPP
-#define Brain_HPP
+#ifndef ANIMAL_HPP
+#define ANIMAL_HPP
 
 # include <iostream>
 
-class Brain
+class Animal
 {
 	protected:
-		std::string ideas[100];
-
-	public:
-		Brain();
-		Brain(const Brain &rhs);
-		Brain& operator=(const Brain &rhs);
-		virtual ~Brain();
+		std::string type;
+		
+		public:
+		Animal();
+		Animal(const Animal &rhs);
+		Animal& operator=(const Animal &rhs);
+		virtual ~Animal();
+		const std::string getType() const;
+		virtual void makeSound() const;
 };
 
 #endif
