@@ -12,13 +12,13 @@ int main()
 		std::cout << "Type in your command (ADD, SEARCH, EXIT):" << std::endl;
 		std::getline(std::cin, input);
 		if (std::cin.eof())
-			break ;
+			break;
 		if (!input.compare("ADD"))
 			book.add_contact();
 		if (!input.compare("SEARCH"))
 			book.search_contact();
 		if (!input.compare("EXIT"))
-			break ;
+			break;
 	}
 	std::cout << "Your contacts are lost forever" << std::endl;
 }

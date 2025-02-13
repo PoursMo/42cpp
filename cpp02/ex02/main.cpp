@@ -9,9 +9,14 @@ int main(void)
 	std::cout << ++a << std::endl;
 	std::cout << a << std::endl;
 	std::cout << a++ << std::endl;
-	std::cout << a << std::endl;
+	std::cout << "a: " << a << std::endl;
 
-	std::cout << b << std::endl;
-	
+	std::cout << "b: " << b << std::endl;
+
+	std::cout << "b > a: " << (b > a) << std::endl;
+	std::cout << "b == a: " << (b == a) << std::endl;
+	std::cout << "b <= a: " << (b <= a) << std::endl;
+	std::cout << "b / a: " << (b / a) << std::endl;
+
 	std::cout << Fixed::max(a, b) << std::endl;
 }

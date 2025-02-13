@@ -1,5 +1,4 @@
 #include "Character.hpp"
-#include <iostream> //bite
 
 Character::Character(std::string const &name) : name(name)
 {
@@ -70,7 +69,7 @@ void Character::unequip(int idx)
 {
 	if (idx < 4 && idx >= 0 && inventory[idx])
 	{
-		// floored_materias.push_back(inventory[idx]); DO SOMETHING
+		AMateria::floored_materias.push_back(inventory[idx]);
 		inventory[idx] = 0;
 	}
 }

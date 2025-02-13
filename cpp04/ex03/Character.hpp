@@ -2,7 +2,6 @@
 #define CHARACTER_HPP
 
 #include <string>
-#include <vector>
 #include "ICharacter.hpp"
 #include "AMateria.hpp"
 

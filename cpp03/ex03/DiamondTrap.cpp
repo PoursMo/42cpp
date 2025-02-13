@@ -2,33 +2,35 @@
 
 DiamondTrap::DiamondTrap() : ScavTrap(), FragTrap()
 {
-	hit_points = FragTrap::hit_points;
-	energy_points = ScavTrap::energy_points;
-	attack_damage = FragTrap::attack_damage;
 	std::cout << "DiamondTrap " << name << " was created with default constructor" << std::endl;
+	hit_points = 100;
+	energy_points = 50;
+	attack_damage = 30;
+	print_stats();
 }
 
 DiamondTrap::DiamondTrap(std::string name) : ClapTrap(name + "_clap_name"), ScavTrap(name), FragTrap(name), name(name)
 {
+	std::cout << "DiamondTrap " << name << " was created with parameterized constructor" << std::endl;
 	hit_points = 100;
 	energy_points = 50;
 	attack_damage = 30;
-	std::cout << "DiamondTrap " << name << " was created with parameterized constructor" << std::endl;
+	print_stats();
 }
 
-DiamondTrap::DiamondTrap(const DiamondTrap& rhs) : ClapTrap(rhs), ScavTrap(rhs), FragTrap(rhs), name(rhs.name)
+DiamondTrap::DiamondTrap(const DiamondTrap &rhs) : ClapTrap(rhs), ScavTrap(rhs), FragTrap(rhs), name(rhs.name)
 {
 	std::cout << "DiamondTrap " << name << " was created with a copy constructor" << std::endl;
 }
 
-DiamondTrap& DiamondTrap::operator=(const DiamondTrap& rhs)
+DiamondTrap &DiamondTrap::operator=(const DiamondTrap &rhs)
 {
 	if (this != &rhs)
 	{
+		std::cout << "DiamondTrap " << "Assigning " << rhs.name << " to " << name << std::endl;
 		ScavTrap::operator=(rhs);
 		FragTrap::operator=(rhs);
 		name = rhs.name;
-		std::cout << "DiamondTrap " << "Assigning " << rhs.name << " to " << name << std::endl;
 	}
 	return *this;
 }
@@ -38,7 +40,7 @@ DiamondTrap::~DiamondTrap()
 	std::cout << "DiamondTrap " << name << "'s Destructor called" << std::endl;
 }
 
-void DiamondTrap::attack(const std::string& target)
+void DiamondTrap::attack(const std::string &target)
 {
 	ScavTrap::attack(target);
 }

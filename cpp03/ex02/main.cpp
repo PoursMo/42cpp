@@ -11,7 +11,7 @@ int main()
 	ft.attack("John");
 	ft.beRepaired(20);
 	ft.highFivesGuys();
-	
+
 	ft = FragTrap("William");
 	for (size_t i = 0; i < 101; i++)
 	{
@@ -28,7 +28,7 @@ int main()
 	st.attack("John");
 	st.beRepaired(20);
 	st.guardGate();
-	
+
 	st = ScavTrap("William");
 	for (size_t i = 0; i < 51; i++)
 	{

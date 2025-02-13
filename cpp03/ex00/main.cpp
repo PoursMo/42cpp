@@ -8,7 +8,7 @@ int main()
 	ct.takeDamage(150);
 	ct.attack("John");
 	ct.beRepaired(20);
-	
+
 	ct = ClapTrap("William");
 	for (size_t i = 0; i < 11; i++)
 	{

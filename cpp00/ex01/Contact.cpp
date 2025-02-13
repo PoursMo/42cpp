@@ -11,11 +11,7 @@ void Contact::display_contact()
 
 bool Contact::empty()
 {
-	return (first_name.empty()
-		&& last_name.empty()
-		&& nickname.empty()
-		&& darkest_secret.empty()
-		&& phone_number.empty());
+	return (first_name.empty() && last_name.empty() && nickname.empty() && darkest_secret.empty() && phone_number.empty());
 }
 
 std::string Contact::get_first_name()

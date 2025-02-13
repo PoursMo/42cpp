@@ -9,11 +9,11 @@ static std::string truncated_string(std::string str)
 
 static bool is_valid_number(std::string str)
 {
-	if(str.empty())
+	if (str.empty())
 		return false;
 	for (size_t i = 0; i < str.size(); i++)
 	{
-		if(!std::isdigit(str[i]) && str[i] != ' ')
+		if (!std::isdigit(str[i]))
 			return false;
 	}
 	return true;
@@ -22,7 +22,7 @@ static bool is_valid_number(std::string str)
 static std::string get_element(std::string message)
 {
 	std::string element;
-	while(element.empty() && !std::cin.eof())
+	while (element.empty() && !std::cin.eof())
 	{
 		std::cout << message << std::endl;
 		std::getline(std::cin, element);
@@ -50,12 +50,12 @@ void PhoneBook::display_contacts()
 
 void PhoneBook::add_contact()
 {
-	contacts[contact_index].set_first_name(get_element("First name:"));
-	contacts[contact_index].set_last_name(get_element("Last name:"));
-	contacts[contact_index].set_nickname(get_element("Nickname:"));
-	contacts[contact_index].set_darkest_secret(get_element("Darkest secret:"));
+	contacts[contact_index].set_first_name(get_element("First name (no empty input):"));
+	contacts[contact_index].set_last_name(get_element("Last name (no empty input):"));
+	contacts[contact_index].set_nickname(get_element("Nickname (no empty input):"));
+	contacts[contact_index].set_darkest_secret(get_element("Darkest secret (no empty input):"));
 	while (!is_valid_number(contacts[contact_index].get_phone_number()) && !std::cin.eof())
-		contacts[contact_index].set_phone_number(get_element("Phone number:"));
+		contacts[contact_index].set_phone_number(get_element("Phone number (no empty input & only numbers):"));
 	if (contact_index + 1 >= 8)
 		contact_index = 0;
 	else
@@ -70,7 +70,7 @@ void PhoneBook::search_contact()
 	if (i < 0 || i > 7 || contacts[i].empty())
 	{
 		std::cout << "Not a valid index" << std::endl;
-		return ;
+		return;
 	}
 	contacts[i].display_contact();
 }

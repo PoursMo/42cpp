@@ -23,5 +23,7 @@ int main()
 	delete bob;
 	delete me;
 	delete src;
-	// Character::floored_materias.clear();
+
+	
+	AMateria::floored_materias.clear();
 }

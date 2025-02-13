@@ -10,12 +10,12 @@ ClapTrap::ClapTrap(std::string name) : name(name), hit_points(10), energy_points
 	std::cout << "ClapTrap " << name << " was created with parameterized constructor" << std::endl;
 }
 
-ClapTrap::ClapTrap(const ClapTrap& rhs) : name(rhs.name), hit_points(rhs.hit_points), energy_points(rhs.energy_points), attack_damage(rhs.attack_damage)
+ClapTrap::ClapTrap(const ClapTrap &rhs) : name(rhs.name), hit_points(rhs.hit_points), energy_points(rhs.energy_points), attack_damage(rhs.attack_damage)
 {
 	std::cout << "ClapTrap " << name << " was created with a copy constructor" << std::endl;
 }
 
-ClapTrap& ClapTrap::operator=(const ClapTrap& rhs)
+ClapTrap &ClapTrap::operator=(const ClapTrap &rhs)
 {
 	if (this != &rhs)
 	{
@@ -33,7 +33,7 @@ ClapTrap::~ClapTrap()
 	std::cout << "ClapTrap " << name << "'s Destructor called" << std::endl;
 }
 
-void ClapTrap::attack(const std::string& target)
+void ClapTrap::attack(const std::string &target)
 {
 	if (energy_points > 0 && hit_points > 0)
 	{

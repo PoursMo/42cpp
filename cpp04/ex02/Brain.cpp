@@ -11,7 +11,7 @@ Brain::Brain(const Brain &rhs)
 	std::copy(rhs.ideas, rhs.ideas + 100, ideas);
 }
 
-Brain& Brain::operator=(const Brain &rhs)
+Brain &Brain::operator=(const Brain &rhs)
 {
 	std::cout << "Brain: copy assignment operator called" << std::endl;
 	if (this != &rhs)
@@ -34,7 +34,7 @@ void Brain::print_ideas() const
 	}
 }
 
-std::string* Brain::get_ideas()
+std::string *Brain::get_ideas()
 {
 	return ideas;
 }

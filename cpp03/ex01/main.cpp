@@ -10,7 +10,7 @@ int main()
 	ct.attack("John");
 	ct.beRepaired(20);
 	ct.guardGate();
-	
+
 	ct = ScavTrap("William");
 	for (size_t i = 0; i < 51; i++)
 	{

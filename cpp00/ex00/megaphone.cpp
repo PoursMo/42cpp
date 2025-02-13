@@ -8,7 +8,7 @@ int main(int argc, char **argv)
 		while (*argv)
 		{
 			std::string strarg(*argv);
-			for(size_t i = 0; i < strarg.size(); i++)
+			for (size_t i = 0; i < strarg.size(); i++)
 				std::cout << (char)std::toupper(strarg[i]);
 			argv++;
 		}

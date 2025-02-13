@@ -3,9 +3,6 @@
 
 int main()
 {
-	// Animal animal;
-	// Animal *animal_ptr = new Animal();
-
 	int size = 20;
 	std::cout << "\e[1;35mcreating array\e[0m" << std::endl;
 	Animal *animals[size];
