@@ -43,6 +43,10 @@ Character::~Character()
 		if (inventory[i])
 			delete inventory[i];
 	}
+	for (size_t i = 0; i < unequipped_materias.size(); i++)
+	{
+		delete unequipped_materias[i];
+	}
 }
 
 std::string const &Character::getName() const
@@ -62,6 +66,7 @@ void Character::equip(AMateria *m)
 				return;
 			}
 		}
+		unequipped_materias.push_back(m);
 	}
 }
 
@@ -69,7 +74,7 @@ void Character::unequip(int idx)
 {
 	if (idx < 4 && idx >= 0 && inventory[idx])
 	{
-		AMateria::floored_materias.push_back(inventory[idx]);
+		unequipped_materias.push_back(inventory[idx]);
 		inventory[idx] = 0;
 	}
 }

@@ -1,6 +1,7 @@
 #ifndef CHARACTER_HPP
 #define CHARACTER_HPP
 
+#include <vector>
 #include <string>
 #include "ICharacter.hpp"
 #include "AMateria.hpp"
@@ -10,6 +11,7 @@ class Character : public ICharacter
 private:
 	std::string name;
 	AMateria *inventory[4];
+	std::vector<AMateria *> unequipped_materias;
 
 public:
 	Character(std::string const &name);

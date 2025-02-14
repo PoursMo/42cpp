@@ -2,7 +2,6 @@
 #define AMATERIA_HPP
 
 #include <string>
-#include <vector>
 
 class ICharacter;
 
@@ -19,7 +18,6 @@ public:
 	std::string const &getType() const; // Returns the materia type
 	virtual AMateria *clone() const = 0;
 	virtual void use(ICharacter &target) = 0;
-	static std::vector<AMateria *> floored_materias;
 };
 
 #endif
