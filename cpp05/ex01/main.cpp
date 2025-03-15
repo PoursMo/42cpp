@@ -5,9 +5,10 @@ int main()
 {
 	Bureaucrat george("George", 10);
 	std::cout << george << std::endl;
+	std::cout << std::endl;
 	try
 	{
-		Form form("Formy", 151, 1);
+		Form form("Formo", 151, 1);
 	}
 	catch(const std::exception& e)
 	{

@@ -45,4 +45,15 @@ int main()
 		std::cout << e.what() << std::endl;
 	}
 // *********************************************************
+	std::cout << std::endl;
+	try
+	{
+		Bureaucrat b("Patrick2", 0);
+		std::cout << b << std::endl;
+	}
+	catch (std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+// *********************************************************
 }

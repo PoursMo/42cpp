@@ -21,7 +21,7 @@ Bureaucrat::~Bureaucrat()
 {
 }
 
-Bureaucrat Bureaucrat::operator=(const Bureaucrat &rhs)
+Bureaucrat &Bureaucrat::operator=(const Bureaucrat &rhs)
 {
 	if (this != &rhs)
 	{
@@ -68,12 +68,12 @@ void Bureaucrat::signForm(Form &form) const
 
 const char *Bureaucrat::GradeTooHighException::what() const throw()
 {
-	return "bureaucrat grade too high";
+	return "Bureaucrat: grade too high";
 }
 
 const char *Bureaucrat::GradeTooLowException::what() const throw()
 {
-	return "bureaucrat grade too low";
+	return "Bureaucrat: grade too low";
 }
 
 std::ostream &operator<<(std::ostream &stream, const Bureaucrat &bureaucrat)

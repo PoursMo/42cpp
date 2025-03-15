@@ -19,7 +19,7 @@ Form::~Form()
 {
 }
 
-Form Form::operator=(const Form &rhs)
+Form &Form::operator=(const Form &rhs)
 {
 	if (this != &rhs)
 	{
@@ -58,12 +58,12 @@ void Form::beSigned(const Bureaucrat &bureaucrat)
 
 const char *Form::GradeTooHighException::what() const throw()
 {
-	return "form grade too high";
+	return "Form: grade too high";
 }
 
 const char *Form::GradeTooLowException::what() const throw()
 {
-	return "form grade too low";
+	return "Form: grade too low";
 }
 
 std::ostream &operator<<(std::ostream &stream, const Form &form)
