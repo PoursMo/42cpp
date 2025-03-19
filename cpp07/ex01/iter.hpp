@@ -4,18 +4,37 @@
 #include <iostream>
 
 template <typename T>
-void iter(T *ptr, size_t len, void (*func)(T const &))
+void iter(T *ptr, std::size_t len, void (*func)(T &))
 {
-	for (size_t i = 0; i < len; i++)
+	for (std::size_t i = 0; i < len; i++)
 	{
 		func(ptr[i]);
 	}
 }
 
 template <typename T>
-void print(T const &value)
+void iter(const T *ptr, std::size_t len, void (*func)(const T &))
+{
+	for (std::size_t i = 0; i < len; i++)
+	{
+		func(ptr[i]);
+	}
+}
+
+template <typename T>
+void print(const T &value)
 {
 	std::cout << value << std::endl;
+}
+
+void increment(int &value)
+{
+	value++;
+}
+
+void increment(float &value)
+{
+	value++;
 }
 
 #endif
