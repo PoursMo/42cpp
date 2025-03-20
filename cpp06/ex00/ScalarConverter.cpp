@@ -102,10 +102,7 @@ void convertDouble(const std::string &literal)
 		std::cout << "char: impossible" << std::endl;
 	else
 		printChar(static_cast<char>(d));
-	if (d > __INT_MAX__)
-		std::cout << "int: impossible" << std::endl;
-	else
-		std::cout << "int: " << static_cast<int>(d) << std::endl;
+	std::cout << "int: " << static_cast<int>(d) << std::endl;
 	std::cout << std::fixed << std::setprecision(1);
 	std::cout << "float: " << static_cast<float>(d) << "f" << std::endl;
 	std::cout << "double: " << d << std::endl;
