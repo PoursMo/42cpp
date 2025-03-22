@@ -1,4 +1,5 @@
 #include "MutantStack.hpp"
+#include <iomanip>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -7,18 +8,18 @@
 template <typename T>
 void printTests(T it)
 {
-	std::cout << "it value.........:" << *it << std::endl;
-	std::cout << "it += 1..........:" << *(it += 1) << std::endl;
-	std::cout << "it -= 1..........:" << *(it -= 1) << std::endl;
-	std::cout << "1 + it...........:" << *(1 + it) << std::endl;
-	std::cout << "it + 3...........:" << *(it + 3) << std::endl;
-	std::cout << "it[5]............:" << it[5] << std::endl;
-	std::cout << "it - (it + 2)....:" << it - (it + 2) << std::endl;
-	std::cout << "it < (it - 2)....:" << (it < (it - 2) ? "true" : "false") << std::endl;
-	std::cout << "it > (it - 2)....:" << (it > (it - 2) ? "true" : "false") << std::endl;
-	std::cout << "it >= (it - 2)...:" << (it >= (it - 2) ? "true" : "false") << std::endl;
-	std::cout << "it >= it.........:" << (it >= it ? "true" : "false") << std::endl;
-	std::cout << "it <= (it - 2)...:" << (it <= (it - 2) ? "true" : "false") << std::endl;
+	std::cout << std::setw(20) << std::setfill('_') << std::left << "it value" << *it << std::endl;
+	std::cout << std::setw(20) << std::setfill('_') << std::left << "it += 1" << *(it += 1) << std::endl;
+	std::cout << std::setw(20) << std::setfill('_') << std::left << "it -= 1" << *(it -= 1) << std::endl;
+	std::cout << std::setw(20) << std::setfill('_') << std::left << "1 + it" << *(1 + it) << std::endl;
+	std::cout << std::setw(20) << std::setfill('_') << std::left << "it + 3" << *(it + 3) << std::endl;
+	std::cout << std::setw(20) << std::setfill('_') << std::left << "it[5]" << it[5] << std::endl;
+	std::cout << std::setw(20) << std::setfill('_') << std::left << "it - (it + 2)" << it - (it + 2) << std::endl;
+	std::cout << std::setw(20) << std::setfill('_') << std::left << "it < (it - 2)" << (it < (it - 2) ? "true" : "false") << std::endl;
+	std::cout << std::setw(20) << std::setfill('_') << std::left << "it > (it - 2)" << (it > (it - 2) ? "true" : "false") << std::endl;
+	std::cout << std::setw(20) << std::setfill('_') << std::left << "it >= (it - 2)" << (it >= (it - 2) ? "true" : "false") << std::endl;
+	std::cout << std::setw(20) << std::setfill('_') << std::left << "it >= it" << (it >= it ? "true" : "false") << std::endl;
+	std::cout << std::setw(20) << std::setfill('_') << std::left << "it <= (it - 2)" << (it <= (it - 2) ? "true" : "false") << std::endl;
 }
 
 int main()
