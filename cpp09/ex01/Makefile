@@ -1,7 +1,8 @@
 CC = c++
 CFLAG = -Wall -Wextra -Werror -std=c++98
-NAME = ex01
+NAME = RPN
 SRCS = main.cpp \
+RPN.cpp \
 
 OBJS = ${SRCS:%.cpp=%.o}
 
