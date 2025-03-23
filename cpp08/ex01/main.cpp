@@ -53,7 +53,7 @@ int main()
 	Span sp2(100);
 	try
 	{
-		sp2.addNumber(vec.begin(), vec.end());
+		sp2.addNumbers(vec.begin(), vec.end());
 	}
 	catch (const std::exception &e)
 	{

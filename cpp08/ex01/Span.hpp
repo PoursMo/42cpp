@@ -22,7 +22,7 @@ public:
 	const int &operator[](unsigned int pos) const;
 	void addNumber(int num);
 	template <typename T>
-	void addNumber(T begin, T end)
+	void addNumbers(T begin, T end)
 	{
 		while (begin != end)
 		{
