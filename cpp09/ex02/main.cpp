@@ -340,6 +340,30 @@ bool compare(IteratorGroup<T> a, IteratorGroup<T> b)
 	return *a > *b;
 }
 
+// true if a is bigger than b
+bool compare(int a, int b)
+{
+	comparisons++;
+	return a > b;
+}
+
+int binarySearch(int T, std::vector<VectorItGroup> &vector)
+{
+	int L = 0;
+	int R = vector.size() - 1;
+	while (L <= R)
+	{
+		int m = (L + R) / 2;
+		if (compare(T, *(vector[m])))
+			L = m + 1;
+		else if (compare(*(vector[m]), T))
+			R = m - 1;
+		else
+			return m;
+	}
+	return L;
+}
+
 void mergeSort(VectorItGroup begin, VectorItGroup end)
 {
 	printGroups(begin, end); // debug
@@ -381,7 +405,11 @@ void mergeSort(VectorItGroup begin, VectorItGroup end)
 		std::cout << "inserting: "; // debug
 		while (--index >= jacobsthal[i - 1] - 1)
 		{
-			std::cout << *(pend[index]) << " "; // debug
+			std::cout << *(pend[index]) << ", at: "; // debug
+			std::cout << binarySearch(*(pend[index]), main) << "\n";
+			// actual insert
+			// in main
+			// for real
 		}
 		std::cout << std::endl; // debug
 	}
