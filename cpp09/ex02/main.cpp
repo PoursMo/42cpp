@@ -2,40 +2,284 @@
 
 #include <vector>
 #include <iostream>
+#include <iomanip>
 #include <cstdlib>
 #include <cstdio>
+#include <cstddef>
 #include <algorithm>
 #include <sys/time.h>
+#include <cmath>
+#include <sstream>
 
-class Timer
+// *******************************************************************
+// Colors
+// *******************************************************************
+
+// Regular text
+#define BLK "\e[0;30m"
+#define RED "\e[0;31m"
+#define GRN "\e[0;32m"
+#define YEL "\e[0;33m"
+#define BLU "\e[0;34m"
+#define MAG "\e[0;35m"
+#define CYN "\e[0;36m"
+#define WHT "\e[0;37m"
+
+// Regular bold text
+#define BBLK "\e[1;30m"
+#define BRED "\e[1;31m"
+#define BGRN "\e[1;32m"
+#define BYEL "\e[1;33m"
+#define BBLU "\e[1;34m"
+#define BMAG "\e[1;35m"
+#define BCYN "\e[1;36m"
+#define BWHT "\e[1;37m"
+
+// Reset
+#define CRESET "\e[0m"
+
+// *******************************************************************
+// Monitoring
+// *******************************************************************
+
+int comparisons = 0;
+
+int maxComparisons(int n)
+{
+	int sum = 0;
+	for (int k = 1; k <= n; ++k)
+	{
+		double value = (3.0 / 4.0) * k;
+		sum += static_cast<int>(std::ceil(log2(value)));
+	}
+	return sum;
+}
+
+class Monitor
 {
 private:
 	suseconds_t start_usecs;
 	unsigned int range_size;
 	std::string container_type;
-	Timer();
-	Timer(const Timer &rhs);
-	Timer &operator=(const Timer &rhs);
+	Monitor();
+	Monitor(const Monitor &rhs);
+	Monitor &operator=(const Monitor &rhs);
 
 public:
-	Timer(const int size, const std::string &container);
-	~Timer();
+	Monitor(const int size, const std::string &container);
+	~Monitor();
 };
 
-Timer::Timer(const int size, const std::string &container) : range_size(size), container_type(container)
+Monitor::Monitor(const int size, const std::string &container) : range_size(size), container_type(container)
 {
 	timeval tp;
 	gettimeofday(&tp, NULL);
 	start_usecs = tp.tv_usec;
 }
 
-Timer::~Timer()
+Monitor::~Monitor()
 {
 	timeval tp;
 	gettimeofday(&tp, NULL);
-	suseconds_t diff = tp.tv_usec - start_usecs;
-	std::cout << "Time to process a range of " << range_size << " elements with " << container_type << ": " << diff << " μs" << std::endl;
+	suseconds_t time = tp.tv_usec - start_usecs;
+	int max_comp = maxComparisons(range_size);
+	std::cout << "******************************************\n";
+	std::cout << std::setw(25) << std::left << "Container type: " << BRED << container_type << "\n"
+			  << CRESET;
+	std::cout << std::setw(25) << std::left << "Range size: " << BYEL << range_size << "\n"
+			  << CRESET;
+	std::cout << std::setw(25) << std::left << "Time: " << BCYN << time << " us\n"
+			  << CRESET;
+	std::cout << std::setw(25) << std::left << "Max nb comparisons: " << BGRN << max_comp << "\n"
+			  << CRESET;
+	std::cout << std::setw(25) << std::left << "Comparisons count: " << BMAG << comparisons << "\n"
+			  << CRESET;
+	std::cout << "******************************************" << std::endl;
 }
+
+// *******************************************************************
+// IteratorGroup
+// *******************************************************************
+
+template <typename Iterator>
+class IteratorGroup
+{
+private:
+	Iterator base;
+	std::size_t size;
+	IteratorGroup();
+
+public:
+	// *******************************************************************
+	// Constructors
+	// *******************************************************************
+
+	IteratorGroup(const Iterator &base, std::size_t size) : base(base), size(size) {}
+	IteratorGroup(const IteratorGroup &rhs) : base(rhs.base), size(rhs.size) {}
+	IteratorGroup(const IteratorGroup &rhs, std::size_t size) : base(rhs.base), size(size) {}
+
+	// *******************************************************************
+	// Operations
+	// *******************************************************************
+
+	void swap(IteratorGroup rhs)
+	{
+		std::swap_ranges(base, base + size, rhs.base);
+	}
+
+	// *******************************************************************
+	// Getters
+	// *******************************************************************
+
+	std::size_t getSize()
+	{
+		return size;
+	}
+
+	Iterator getBase()
+	{
+		return base;
+	}
+
+	// *******************************************************************
+	// Access operators
+	// *******************************************************************
+
+	typename Iterator::reference operator*() const
+	{
+		return base[size - 1];
+	}
+
+	typename Iterator::pointer operator->() const
+	{
+		return &(*base);
+	}
+
+	typename Iterator::reference operator[](std::size_t index)
+	{
+		return base[index * size + size - 1];
+	}
+
+	typename Iterator::reference operator[](std::size_t index) const
+	{
+		return base[index * size + size - 1];
+	}
+
+	// *******************************************************************
+	// Increment/decrement operators
+	// *******************************************************************
+
+	IteratorGroup &operator++()
+	{
+		base += size;
+		return *this;
+	}
+
+	IteratorGroup operator++(int)
+	{
+		IteratorGroup temp = *this;
+		++(*this);
+		return temp;
+	}
+
+	IteratorGroup &operator--()
+	{
+		base -= size;
+		return *this;
+	}
+
+	IteratorGroup operator--(int)
+	{
+		IteratorGroup temp = *this;
+		--(*this);
+		return temp;
+	}
+
+	// *******************************************************************
+	// Assignment operators
+	// *******************************************************************
+
+	IteratorGroup &operator+=(std::size_t n)
+	{
+		base += n * size;
+		return *this;
+	}
+
+	IteratorGroup &operator-=(std::size_t n)
+	{
+		base -= n * size;
+		return *this;
+	}
+
+	IteratorGroup &operator=(const IteratorGroup &rhs)
+	{
+		if (this != &rhs)
+		{
+			base = rhs.base;
+			size = rhs.size;
+		}
+		return *this;
+	}
+
+	// *******************************************************************
+	// Arithmetic operators
+	// *******************************************************************
+
+	IteratorGroup operator+(std::size_t n) const
+	{
+		return IteratorGroup(base + n * size, size);
+	}
+
+	IteratorGroup operator-(std::size_t n) const
+	{
+		return IteratorGroup(base - n * size, size);
+	}
+
+	std::ptrdiff_t operator-(IteratorGroup &rhs)
+	{
+		return (base - rhs.base) / static_cast<std::ptrdiff_t>(size);
+	}
+
+	// *******************************************************************
+	// Comparison operators
+	// *******************************************************************
+
+	bool operator==(const IteratorGroup &rhs) const
+	{
+		return base == rhs.base;
+	}
+
+	bool operator!=(const IteratorGroup &rhs) const
+	{
+		return base != rhs.base;
+	}
+
+	bool operator>=(const IteratorGroup &rhs) const
+	{
+		return base >= rhs.base;
+	}
+
+	bool operator<=(const IteratorGroup &rhs) const
+	{
+		return base <= rhs.base;
+	}
+
+	bool operator<(const IteratorGroup &rhs) const
+	{
+		return base < rhs.base;
+	}
+
+	bool operator>(const IteratorGroup &rhs) const
+	{
+		return base > rhs.base;
+	}
+};
+
+typedef IteratorGroup<std::vector<int>::iterator> VectorItGroup;
+
+// *******************************************************************
+// Utils
+// *******************************************************************
 
 std::ostream &operator<<(std::ostream &stream, std::vector<int> &container)
 {
@@ -44,6 +288,17 @@ std::ostream &operator<<(std::ostream &stream, std::vector<int> &container)
 		if (it != container.begin())
 			stream << ", ";
 		stream << *it;
+	}
+	return stream;
+}
+
+std::ostream &operator<<(std::ostream &stream, std::vector<VectorItGroup> &container)
+{
+	for (std::vector<VectorItGroup>::iterator it = container.begin(); it != container.end(); it++)
+	{
+		if (it != container.begin())
+			stream << ", ";
+		stream << *(*it);
 	}
 	return stream;
 }
@@ -61,149 +316,75 @@ bool isSorted(T &container)
 	return true;
 }
 
-template <typename Iterator>
-class SizedIterator
-{
-private:
-	Iterator it;
-	std::size_t step_size;
-	SizedIterator();
-
-public:
-	SizedIterator(const Iterator &iterator, std::size_t size) : it(iterator), step_size(size) {}
-
-	// SizedIterator(const SizedIterator &rhs) : it(rhs.it), step_size(rhs.step_size) {}
-
-	SizedIterator(const SizedIterator &rhs, std::size_t size) : it(rhs.it), step_size(size) {}
-
-	void swap(SizedIterator rhs)
-	{
-		std::swap_ranges(it - step_size + 1, it + 1, rhs.it - rhs.step_size + 1);
-	}
-
-	ptrdiff_t distance(SizedIterator rhs)
-	{
-		return std::distance(it - step_size + 1, rhs.it - rhs.step_size + 1);
-	}
-
-	Iterator getIterator()
-	{
-		return it;
-	}
-
-	std::size_t getSize()
-	{
-		return step_size;
-	}
-
-	typename Iterator::reference operator*() const
-	{
-		return *it;
-	}
-
-	typename Iterator::pointer operator->() const
-	{
-		return &(*it);
-	}
-
-	SizedIterator &operator++()
-	{
-		std::advance(it, step_size);
-		return *this;
-	}
-
-	SizedIterator operator++(int)
-	{
-		SizedIterator temp = *this;
-		std::advance(it, step_size);
-		return temp;
-	}
-
-	typename Iterator::reference operator[](std::size_t index) const
-	{
-		Iterator temp = it;
-		std::advance(temp, index * step_size);
-		return *temp;
-	}
-
-	SizedIterator &operator+=(std::size_t n)
-	{
-		std::advance(it, n * step_size);
-		return *this;
-	}
-
-	SizedIterator operator+(std::size_t n) const
-	{
-		Iterator temp = it;
-		std::advance(temp, n * step_size);
-		return SizedIterator(temp, step_size);
-	}
-
-	SizedIterator operator-(std::size_t n) const
-	{
-		Iterator temp = it;
-		std::advance(temp, -n * step_size);
-		return SizedIterator(temp, step_size);
-	}
-
-	std::ptrdiff_t operator-(const SizedIterator &rhs) const
-	{
-		return std::distance(rhs.it, it) / static_cast<std::ptrdiff_t>(step_size);
-	}
-
-	bool operator==(const SizedIterator &rhs) const
-	{
-		return it == rhs.it;
-	}
-
-	bool operator!=(const SizedIterator &rhs) const
-	{
-		return it != rhs.it;
-	}
-};
-
 template <typename T>
-void printRange(SizedIterator<T> begin, SizedIterator<T> end)
+void printGroups(IteratorGroup<T> &begin, IteratorGroup<T> &end)
 {
-	std::size_t count = 0;
-	for (SizedIterator<T> it = begin; it != end; it++)
+	for (IteratorGroup<T> it = begin; it != end; it++)
 	{
-		if (count++ % 2 == 0)
-			std::cout << " | ";
-		else
-			std::cout << ", ";
-		std::cout << *it;
+		std::cout << *it << " ";
 	}
-	std::cout << " | " << std::endl;
+	std::cout << std::endl;
 }
 
-void mergeSort(SizedIterator<std::vector<int>::iterator> begin, SizedIterator<std::vector<int>::iterator> end)
+// *******************************************************************
+// Algo
+// *******************************************************************
+
+static const long jacobsthal[] = {1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, 5461, 10923, 21845, 43691, 87381, 174763, 349525, 699051, 1398101, 2796203, 5592405, 11184811, 22369621, 44739243, 89478485, 178956971, 357913941, 715827883, 1431655765, 2863311531, 5726623061, 11453246123};
+
+// true if a is bigger than b
+template <typename T>
+bool compare(IteratorGroup<T> a, IteratorGroup<T> b)
 {
-	std::cout << "full: ";
-	for (std::vector<int>::iterator it = begin.getIterator() - begin.getSize() + 1; it != end.getIterator() - end.getSize() + 1; it++)
-	{
-		std::cout << *it << ", ";
-	}
-	std::cout << std::endl;
-	
-	int distance = end - begin;
-	std::cout << "distance: " << distance << std::endl;
+	comparisons++;
+	return *a > *b;
+}
+
+void mergeSort(VectorItGroup begin, VectorItGroup end)
+{
+	printGroups(begin, end); // debug
+	std::ptrdiff_t distance = end - begin;
+	std::cout << "distance: " << distance << std::endl; // debug
 	if (distance < 2)
 		return;
-	SizedIterator<std::vector<int>::iterator> last = distance & 1 ? end - 1 : end;
-	std::cout << "before: ";
-	printRange(begin, end);
-	for (SizedIterator<std::vector<int>::iterator> it = begin; it != last; it += 2)
+	VectorItGroup last = distance & 1 ? end - 1 : end;
+	for (VectorItGroup it = begin; it != last; it += 2)
 	{
-		if (it[0] > it[1])
-		{
+		if (compare(it, it + 1))
 			it.swap(it + 1);
-		}
 	}
-	std::cout << "after: ";
-	printRange(begin, end);
-	std::cout << std::endl;
-	mergeSort(SizedIterator(begin + 1, begin.getSize() * 2), SizedIterator(last + 1, last.getSize() * 2));
+	printGroups(begin, end); // debug
+	mergeSort(VectorItGroup(begin, begin.getSize() * 2), VectorItGroup(last, last.getSize() * 2));
+	std::vector<VectorItGroup> main;
+	main.push_back(begin);
+	main.push_back(begin + 1);
+	for (int i = 2; begin + i != end; i++)
+	{
+		if (i % 2 != 0)
+			main.push_back(begin + i);
+	}
+	std::cout << "main: " << main << std::endl; // debug
+	std::vector<VectorItGroup> pend;
+	for (int i = 2; begin + i != end; i++)
+	{
+		if (i % 2 == 0)
+			pend.push_back(begin + i);
+	}
+	std::cout << "pend: " << pend << std::endl; // debug
+	std::size_t i = 0;
+	while (static_cast<long>(pend.size()) > jacobsthal[i] - 1)
+	{
+		i++;
+		int index = jacobsthal[i] - 1;
+		if (static_cast<int>(pend.size()) < index)
+			index = pend.size();
+		std::cout << "inserting: "; // debug
+		while (--index >= jacobsthal[i - 1] - 1)
+		{
+			std::cout << *(pend[index]) << " "; // debug
+		}
+		std::cout << std::endl; // debug
+	}
 }
 
 int main(int argc, char **argv)
@@ -219,12 +400,20 @@ int main(int argc, char **argv)
 		}
 		container.push_back(value);
 	}
-	if (isSorted(container))
+	if (isSorted(container)) // try without
 	{
 		std::cout << "array is already sorted" << std::endl;
 		return 0;
 	}
-	Timer timer(container.size(), "std::vector");
-	mergeSort(SizedIterator(container.begin(), 1), SizedIterator(container.end(), 1));
-	std::cout << container << std::endl;
+	// std::cout << "Before: " << container << std::endl;
+	{
+		Monitor monitor(container.size(), "std::vector");
+		mergeSort(VectorItGroup(container.begin(), 1), VectorItGroup(container.end(), 1));
+		// std::cout << "After: " << container << std::endl;
+	}
+	comparisons = 0;
+	{
+		// Monitor monitor(container.size(), "std::vector");
+		// other container
+	}
 }
