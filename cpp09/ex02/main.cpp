@@ -12,6 +12,15 @@
 #include <sstream>
 
 // *******************************************************************
+// Debug
+// *******************************************************************
+
+#define DEBUG false
+#if DEBUG
+int level = 0;
+#endif
+
+// *******************************************************************
 // Colors
 // *******************************************************************
 
@@ -58,7 +67,7 @@ int maxComparisons(int n)
 class Monitor
 {
 private:
-	suseconds_t start_usecs;
+	double start_time;
 	unsigned int range_size;
 	std::string container_type;
 	Monitor();
@@ -74,26 +83,27 @@ Monitor::Monitor(const int size, const std::string &container) : range_size(size
 {
 	timeval tp;
 	gettimeofday(&tp, NULL);
-	start_usecs = tp.tv_usec;
+	start_time = tp.tv_sec + tp.tv_usec / 1000000.0;
 }
 
 Monitor::~Monitor()
 {
 	timeval tp;
 	gettimeofday(&tp, NULL);
-	suseconds_t time = tp.tv_usec - start_usecs;
-	int max_comp = maxComparisons(range_size);
+	double time = (tp.tv_sec + tp.tv_usec / 1000000.0) - start_time;
 	std::cout << "******************************************\n";
 	std::cout << std::setw(25) << std::left << "Container type: " << BRED << container_type << "\n"
 			  << CRESET;
 	std::cout << std::setw(25) << std::left << "Range size: " << BYEL << range_size << "\n"
 			  << CRESET;
-	std::cout << std::setw(25) << std::left << "Time: " << BCYN << time << " us\n"
+	std::cout << std::setw(25) << std::left << "Time: " << BCYN << time << " s\n"
 			  << CRESET;
-	std::cout << std::setw(25) << std::left << "Max nb comparisons: " << BGRN << max_comp << "\n"
+#if DEBUG
+	std::cout << std::setw(25) << std::left << "Max nb comparisons: " << BGRN << maxComparisons(range_size) << "\n"
 			  << CRESET;
 	std::cout << std::setw(25) << std::left << "Comparisons count: " << BMAG << comparisons << "\n"
 			  << CRESET;
+#endif
 	std::cout << "******************************************" << std::endl;
 }
 
@@ -285,9 +295,7 @@ std::ostream &operator<<(std::ostream &stream, std::vector<int> &container)
 {
 	for (std::vector<int>::iterator it = container.begin(); it != container.end(); it++)
 	{
-		if (it != container.begin())
-			stream << ", ";
-		stream << *it;
+		stream << *it << " ";
 	}
 	return stream;
 }
@@ -319,11 +327,15 @@ bool isSorted(T &container)
 template <typename T>
 void printGroups(IteratorGroup<T> &begin, IteratorGroup<T> &end)
 {
-	for (IteratorGroup<T> it = begin; it != end; it++)
+	std::size_t size = begin.getSize();
+	std::size_t count = 0;
+	for (T it = begin.getBase(); it != end.getBase(); it++)
 	{
+		if (count++ % size == 0)
+			std::cout << "| ";
 		std::cout << *it << " ";
 	}
-	std::cout << std::endl;
+	std::cout << "|" << std::endl;
 }
 
 // *******************************************************************
@@ -340,44 +352,53 @@ bool compare(IteratorGroup<T> a, IteratorGroup<T> b)
 	return *a > *b;
 }
 
-// true if a is bigger than b
-bool compare(int a, int b)
+std::vector<VectorItGroup>::iterator binarySearch(VectorItGroup T, std::vector<VectorItGroup> &vector)
 {
-	comparisons++;
-	return a > b;
+	std::vector<VectorItGroup>::iterator left = vector.begin();
+	std::vector<VectorItGroup>::iterator right = std::find(vector.begin(), vector.end(), T - 1) + 1;
+	while (left < right)
+	{
+		std::vector<VectorItGroup>::iterator mid = left + (right - left) / 2;
+		if (compare(*mid, T))
+			right = mid;
+		else
+			left = mid + 1;
+	}
+	return left;
 }
 
-int binarySearch(int T, std::vector<VectorItGroup> &vector)
+VectorItGroup find(VectorItGroup begin, VectorItGroup end, int value)
 {
-	int L = 0;
-	int R = vector.size() - 1;
-	while (L <= R)
+	for (; begin != end; begin++)
 	{
-		int m = (L + R) / 2;
-		if (compare(T, *(vector[m])))
-			L = m + 1;
-		else if (compare(*(vector[m]), T))
-			R = m - 1;
-		else
-			return m;
+		if (*begin == value)
+			return begin;
 	}
-	return L;
+	throw std::logic_error("function 'find' should always find the value");
 }
 
 void mergeSort(VectorItGroup begin, VectorItGroup end)
 {
-	printGroups(begin, end); // debug
-	std::ptrdiff_t distance = end - begin;
-	std::cout << "distance: " << distance << std::endl; // debug
-	if (distance < 2)
+	std::ptrdiff_t size = end - begin;
+	if (size < 2)
 		return;
-	VectorItGroup last = distance & 1 ? end - 1 : end;
+#if DEBUG
+	level++;
+	int my_level = level;
+	std::cout << BRED << "level: " << my_level << CRESET << "\n";
+	std::cout << "size: " << size << "\n";
+	printGroups(begin, end);
+#endif
+	VectorItGroup last = size & 1 ? end - 1 : end;
 	for (VectorItGroup it = begin; it != last; it += 2)
 	{
 		if (compare(it, it + 1))
 			it.swap(it + 1);
 	}
-	printGroups(begin, end); // debug
+#if DEBUG
+	printGroups(begin, end);
+	std::cout << std::endl;
+#endif
 	mergeSort(VectorItGroup(begin, begin.getSize() * 2), VectorItGroup(last, last.getSize() * 2));
 	std::vector<VectorItGroup> main;
 	main.push_back(begin);
@@ -387,14 +408,18 @@ void mergeSort(VectorItGroup begin, VectorItGroup end)
 		if (i % 2 != 0)
 			main.push_back(begin + i);
 	}
-	std::cout << "main: " << main << std::endl; // debug
 	std::vector<VectorItGroup> pend;
 	for (int i = 2; begin + i != end; i++)
 	{
 		if (i % 2 == 0)
 			pend.push_back(begin + i);
 	}
-	std::cout << "pend: " << pend << std::endl; // debug
+#if DEBUG
+	std::cout << BRED << "level: " << my_level << CRESET << "\n";
+	printGroups(begin, end);
+	std::cout << "pend: " << pend << "\n";
+	std::cout << "main: " << main << std::endl;
+#endif
 	std::size_t i = 0;
 	while (static_cast<long>(pend.size()) > jacobsthal[i] - 1)
 	{
@@ -402,17 +427,32 @@ void mergeSort(VectorItGroup begin, VectorItGroup end)
 		int index = jacobsthal[i] - 1;
 		if (static_cast<int>(pend.size()) < index)
 			index = pend.size();
-		std::cout << "inserting: "; // debug
 		while (--index >= jacobsthal[i - 1] - 1)
 		{
-			std::cout << *(pend[index]) << ", at: "; // debug
-			std::cout << binarySearch(*(pend[index]), main) << "\n";
-			// actual insert
-			// in main
-			// for real
+			std::vector<VectorItGroup>::iterator insert_point = binarySearch(pend[index], main);
+			main.insert(insert_point, pend[index]);
+#if DEBUG
+			std::cout << "inserting: '" << *pend[index] << "'\n";
+			std::cout << "main: " << main << std::endl;
+#endif
 		}
-		std::cout << std::endl; // debug
 	}
+	std::vector<int> main_copy;
+	for (std::vector<VectorItGroup>::iterator it = main.begin(); it != main.end(); it++)
+	{
+		main_copy.push_back(**it);
+	}
+	for (size_t i = 0; i < main_copy.size(); i++)
+	{
+		if (*(begin + i) != main_copy[i])
+		{
+			VectorItGroup ptr = find(begin + i, end, main_copy[i]);
+			ptr.swap(begin + i);
+		}
+	}
+#if DEBUG
+	std::cout << std::endl;
+#endif
 }
 
 int main(int argc, char **argv)
@@ -428,16 +468,25 @@ int main(int argc, char **argv)
 		}
 		container.push_back(value);
 	}
-	if (isSorted(container)) // try without
 	{
-		std::cout << "array is already sorted" << std::endl;
-		return 0;
+		std::vector<int> copy(container);
+		std::sort(copy.begin(), copy.end());
+		if (std::adjacent_find(copy.begin(), copy.end()) != copy.end())
+		{
+			std::cerr << "Error: duplicate values are not allowed" << std::endl;
+			return 1;
+		}
 	}
-	// std::cout << "Before: " << container << std::endl;
+	// if (isSorted(container))
+	// {
+	// 	std::cout << "array is already sorted" << std::endl;
+	// 	return 0;
+	// }
+	std::cout << "Before: " << container << std::endl;
 	{
 		Monitor monitor(container.size(), "std::vector");
 		mergeSort(VectorItGroup(container.begin(), 1), VectorItGroup(container.end(), 1));
-		// std::cout << "After: " << container << std::endl;
+		std::cout << "After: " << container << std::endl;
 	}
 	comparisons = 0;
 	{
