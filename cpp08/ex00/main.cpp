@@ -44,10 +44,7 @@ int main()
 	std::cout << "\nFound: " << *vector_it << " followed by " << *(++vector_it) << "\n"
 			  << std::endl;
 
-	/* Testing with non-existent element */
-	std::cout << "non-element in the vector\n"
-			  << std::endl;
-
+	/* Testing with non existant element*/
 	std::cout << "Vector:";
 	for (std::vector<int>::iterator it = vector.begin(); it != vector.end(); it++)
 		std::cout << ' ' << *it;

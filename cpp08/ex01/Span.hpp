@@ -1,6 +1,7 @@
 #ifndef SPAN_HPP
 #define SPAN_HPP
 
+#include <cstdlib>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -21,6 +22,7 @@ public:
 	int &operator[](unsigned int pos);
 	const int &operator[](unsigned int pos) const;
 	void addNumber(int num);
+
 	template <typename T>
 	void addNumbers(T begin, T end)
 	{
@@ -32,11 +34,6 @@ public:
 	}
 	int shortestSpan() const;
 	int longestSpan() const;
-
-	void test()
-	{
-		std::sort(integers.begin(), integers.end());
-	}
 };
 
 std::ostream &operator<<(std::ostream &stream, const Span &span);

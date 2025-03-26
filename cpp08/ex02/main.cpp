@@ -1,9 +1,4 @@
 #include "MutantStack.hpp"
-#include <iomanip>
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <list>
 
 template <typename T>
 void printTests(T it)
@@ -32,48 +27,48 @@ int main()
 		std::cout << mstack.top() << std::endl;
 		mstack.pop();
 		std::cout << mstack.size() << std::endl;
-		mstack.push(3);
-		mstack.push(5);
-		mstack.push(737);
-		//[...]
-		mstack.push(0);
+		for (size_t i = 0; i < 1000; i++)
+		{
+			mstack.push(i);
+		}
 		MutantStack<int>::iterator it = mstack.begin();
 		MutantStack<int>::iterator ite = mstack.end();
 		++it;
 		--it;
 		while (it != ite)
 		{
-			std::cout << *it << std::endl;
+			std::cout << *it << " ";
 			++it;
 		}
+		std::cout << std::endl;
 		std::stack<int> s(mstack);
 	}
 	std::cout << std::endl;
 	{
 		std::cout << "std::list: " << std::endl;
-		std::list<int> mstack;
-		mstack.push_back(5);
-		mstack.push_back(17);
-		std::cout << mstack.back() << std::endl;
-		mstack.pop_back();
-		std::cout << mstack.size() << std::endl;
-		mstack.push_back(3);
-		mstack.push_back(5);
-		mstack.push_back(737);
-		//[...]
-		mstack.push_back(0);
-		std::list<int>::iterator it = mstack.begin();
-		std::list<int>::iterator ite = mstack.end();
+		std::list<int> stdlist;
+		stdlist.push_back(5);
+		stdlist.push_back(17);
+		std::cout << stdlist.back() << std::endl;
+		stdlist.pop_back();
+		std::cout << stdlist.size() << std::endl;
+		for (size_t i = 0; i < 1000; i++)
+		{
+			stdlist.push_back(i);
+		}
+		std::list<int>::iterator it = stdlist.begin();
+		std::list<int>::iterator ite = stdlist.end();
 		++it;
 		--it;
 		while (it != ite)
 		{
-			std::cout << *it << std::endl;
+			std::cout << *it << " ";
 			++it;
 		}
-		std::list<int> s(mstack);
+		std::cout << std::endl;
+		std::list<int> s(stdlist);
 	}
-	std::cout << std::endl;
+	std::cout << "*******************************************" << std::endl;
 	{
 		std::cout << "std::vector: " << std::endl;
 		std::vector<int> vector;

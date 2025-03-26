@@ -2,131 +2,40 @@
 #define MUTANTSTACK_HPP
 
 #include <stack>
-
-template <typename T, typename Pointer = T *, typename Reference = T &>
-class MutantIterator
-{
-private:
-	Pointer ptr;
-
-public:
-	MutantIterator(T *ptr) : ptr(ptr) {}
-	MutantIterator &operator++()
-	{
-		ptr++;
-		return *this;
-	}
-	MutantIterator operator++(int)
-	{
-		MutantIterator tmp = *this;
-		ptr++;
-		return tmp;
-	}
-	MutantIterator &operator--()
-	{
-		ptr--;
-		return *this;
-	}
-	MutantIterator operator--(int)
-	{
-		MutantIterator tmp = *this;
-		ptr--;
-		return tmp;
-	}
-	MutantIterator operator+(int value)
-	{
-		return MutantIterator<T>(ptr + value);
-	}
-	MutantIterator operator-(int value)
-	{
-		return MutantIterator<T>(ptr - value);
-	}
-	long operator-(const MutantIterator &rhs)
-	{
-		return ptr - rhs.ptr;
-	}
-	MutantIterator &operator+=(int value)
-	{
-		*this = *this + value;
-		return *this;
-	}
-	MutantIterator &operator-=(int value)
-	{
-		*this = *this - value;
-		return *this;
-	}
-	Reference operator[](int pos)
-	{
-		return *(ptr + pos);
-	}
-	Pointer operator->()
-	{
-		return ptr;
-	}
-	Reference operator*()
-	{
-		return *ptr;
-	}
-	bool operator==(const MutantIterator &rhs)
-	{
-		return ptr == rhs.ptr;
-	}
-	bool operator!=(const MutantIterator &rhs)
-	{
-		return ptr != rhs.ptr;
-	}
-	bool operator<(const MutantIterator &rhs)
-	{
-		return ptr < rhs.ptr;
-	}
-	bool operator>(const MutantIterator &rhs)
-	{
-		return ptr > rhs.ptr;
-	}
-	bool operator<=(const MutantIterator &rhs)
-	{
-		return ptr <= rhs.ptr;
-	}
-	bool operator>=(const MutantIterator &rhs)
-	{
-		return ptr >= rhs.ptr;
-	}
-};
-
-template <typename T>
-MutantIterator<T> operator+(int value, MutantIterator<T> &iterator)
-{
-	return MutantIterator<T>(iterator + value);
-}
+#include <iomanip>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <list>
 
 template <typename T>
 class MutantStack : public std::stack<T>
 {
 public:
-	typedef MutantIterator<T> iterator;
+	typedef typename std::stack<T>::container_type::iterator iterator;
+	MutantStack() : std::stack<T>() {}
+
+	MutantStack(const MutantStack &rhs) : std::stack<T>(rhs) {}
+
+	MutantStack &operator=(const MutantStack &rhs)
+	{
+		if (this != &rhs)
+		{
+			std::stack<T>::operator=(rhs);
+		}
+		return *this;
+	}
+
+	~MutantStack() {}
+
 	iterator begin()
 	{
-		return iterator(&this->c.front());
+		return this->c.begin();
 	}
 	iterator end()
 	{
-		return iterator(&this->c.back() + 1);
+		return this->c.end();
 	}
 };
-
-// template <typename T>
-// class MutantStack : public std::stack<T>
-// {
-// public:
-// 	typedef typename std::stack<T>::container_type::iterator iterator;
-// 	iterator begin()
-// 	{
-// 		return this->c.begin();
-// 	}
-// 	iterator end()
-// 	{
-// 		return this->c.end();
-// 	}
-// };
 
 #endif

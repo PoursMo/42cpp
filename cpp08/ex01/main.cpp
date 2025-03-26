@@ -2,8 +2,6 @@
 #include <iostream>
 #include <cstdlib>
 
-#define RND_RANGE(min, max) min + (std::rand() % (max - min + 1))
-
 int main()
 {
 	std::srand(time(0));
@@ -31,9 +29,9 @@ int main()
 	Span sp(5);
 	try
 	{
-		for (size_t i = 0; i < 6; i++)
+		for (size_t i = 0; i < 6 * 2; i += 2)
 		{
-			sp.addNumber(RND_RANGE(0, 20));
+			sp.addNumber(i);
 		}
 	}
 	catch (std::exception &e)
@@ -46,9 +44,9 @@ int main()
 	// *************************************************************
 	std::cout << std::endl;
 	std::vector<int> vec;
-	for (size_t i = 0; i < 1000; i++)
+	for (size_t i = 0; i < 1000 * 2; i += 2)
 	{
-		vec.push_back(RND_RANGE(-1000, 1000));
+		vec.push_back(i);
 	}
 	Span sp2(100);
 	try
